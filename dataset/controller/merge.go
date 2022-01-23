@@ -14,7 +14,12 @@ type MergedFishModel struct {
 
 func GenerateMergedDataset() []*MergedFishModel {
 	consumption := fish_consumption.GetFishConsumptionData("IDN", 1961, 2017)
+	// Generate Visualisation
+	fish_consumption.GenerateVis(consumption)
+
 	catches := fish_catches.GetFishCatchesData("IDN", 1961, 2017)
+	// Generate Visualisation
+	fish_catches.GenerateVis(catches)
 
 	mergedFishModelData := []*MergedFishModel{}
 	for index := 0; index < len(consumption); index++ {
