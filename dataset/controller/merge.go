@@ -33,12 +33,5 @@ func GenerateMergedDataset() []*MergedFishModel {
 		})
 	}
 
-	// DEBUG Print dataset data
-	// for _, data := range mergedFishModelData {
-	// 	d, _ := json.Marshal(*data)
-	// 	fmt.Println(string(d))
-	// }
-
 	return mergedFishModelData
-
 }

@@ -18,11 +18,9 @@ type FishCatchesCSVModel struct {
 
 func GetFishCatchesData(countryCode string, startYear int, endYear int) []*FishCatchesCSVModel {
 	datasetFile, err := os.OpenFile("dataset/fish_catches/fish_catches.csv", os.O_RDWR|os.O_CREATE, os.ModePerm)
-
 	if err != nil {
 		panic(err)
 	}
-
 	defer datasetFile.Close()
 
 	datas := []*FishCatchesCSVModel{}

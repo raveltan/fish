@@ -1,4 +1,4 @@
-all:
+all: data
 
 data:
 	rm -f dataset/fish.csv 
@@ -10,3 +10,11 @@ viz-catch:
 viz-cons:
 	live-server dataset/fish_consumption.html
 
+viz-reg:
+	live-server predict/linear-reg/viz.html
+
+viz-tree:
+	live-server predict/dt/viz.html
+
+predict:
+	go run predict/main.go
