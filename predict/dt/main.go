@@ -36,14 +36,20 @@ func DecisionTree() (*trees.CARTDecisionTreeRegressor, base.FixedDataGrid) {
 	predictions := model.Predict(testData)
 
 	var mAE float64
+	var mSE float64
 
 	_, size := trainData.Size()
 	for i := 0; i < size; i++ {
 		consumption, _ := strconv.Atoi(strings.Split(trainData.RowString(i), " ")[3])
 		mAE += math.Abs(float64(consumption)-predictions[i]) / float64(size)
+		mSE += (float64(consumption) - predictions[i]) * (float64(consumption) - predictions[i]) / float64(size)
 	}
+	rMSE := math.Sqrt(mSE)
+	nRMSE := rMSE / (44 - 10)
 	fmt.Println("Decision Tree Regression")
-	fmt.Printf("MAE = %0.2f\n\n", mAE)
+	fmt.Printf("MAE = %0.2f\n", mAE)
+	fmt.Printf("RMSE = %0.2f\n", rMSE)
+	fmt.Printf("NRMSE = %0.2f\n\n", nRMSE)
 
 	chartData, _ := base.InstancesTrainTestSplit(data, 0.0)
 	return model, chartData
@@ -52,7 +58,7 @@ func DecisionTree() (*trees.CARTDecisionTreeRegressor, base.FixedDataGrid) {
 func GenerateVis(data []*controller.MergedFishModel, r *trees.CARTDecisionTreeRegressor, chartData base.FixedDataGrid) {
 	bar := charts.NewLine()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
-		Title:    "Prediction of Total Fish Consumption in Indonesia",
+		Title:    "Fish Consumption in Indonesia",
 		Subtitle: "Based on Dicision Tree Regression",
 	}),
 		charts.WithColorsOpts(opts.Colors{opts.HSLColor(168, 80, 20)}),

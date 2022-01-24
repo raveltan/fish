@@ -29,6 +29,7 @@ func Regression(data []*controller.MergedFishModel, testData []*controller.Merge
 	fmt.Printf("\nRegression Formula:\n%v\n", r.Formula)
 
 	var mAE float64
+	var mSE float64
 
 	for _, record := range testData {
 		prediction, _ := r.Predict([]float64{float64(record.Production), float64(record.Year), float64(record.Capture)})
@@ -39,15 +40,20 @@ func Regression(data []*controller.MergedFishModel, testData []*controller.Merge
 		// fmt.Println(prediction - float64(record.Consumption))
 		// fmt.Println("--------")
 		mAE += math.Abs(float64(record.Consumption)-prediction) / float64(len(testData))
+		mSE += (float64(record.Consumption) - prediction) * (float64(record.Consumption) - prediction) / float64(len(testData))
 	}
-	fmt.Printf("MAE = %0.2f\n\n", mAE)
+	rMSE := math.Sqrt(mSE)
+	nRMSE := (rMSE / (44 - 10))
+	fmt.Printf("MAE = %0.2f\n", mAE)
+	fmt.Printf("RMSE = %0.2f\n", rMSE)
+	fmt.Printf("NRMSE = %0.2f\n\n", nRMSE)
 	return r
 }
 
 func GenerateVis(data []*controller.MergedFishModel, r regression.Regression) {
 	bar := charts.NewLine()
 	bar.SetGlobalOptions(charts.WithTitleOpts(opts.Title{
-		Title:    "Prediction of Total Fish Consumption in Indonesia",
+		Title:    "Fish Consumption in Indonesia",
 		Subtitle: "Based on Multivariable Linear Regression",
 	}),
 		charts.WithColorsOpts(opts.Colors{opts.HSLColor(168, 80, 20)}),
